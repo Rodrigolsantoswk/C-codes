@@ -77,14 +77,14 @@ void exibirPosOrdem(no *arvore){
     if(arvore != NULL){ 
         exibirPosOrdem(arvore->esquerda); //chama a função recursivamente pela esquerda 
         exibirPosOrdem(arvore->direita);  //chama a função recursivamente pela direita
-        printf("%i, ", arvore->n); 		  //exibe o elemento
+        printf("%i  ", arvore->n); 		  //exibe o elemento
     }
 }
 
 void exibirEmOrdem(no *arvore){
     if(arvore != NULL){
         exibirEmOrdem(arvore->esquerda); //chama a função recursivamente pela esquerda 
-        printf("%i ,", arvore->n);		 //exibe o elemento
+        printf("%i  ", arvore->n);		 //exibe o elemento
         exibirEmOrdem(arvore->direita);  //chama a função recursivamente pela direita
     }
 }
@@ -161,17 +161,17 @@ int main(){
 				getchar();
 				break;
 			case 2:
-				exibirPreOrdem(arvore); printf("\n");
+				printf("Pré ordem: ");exibirPreOrdem(arvore); printf("\n");
 				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
 			case 3:
-				exibirPosOrdem(arvore); printf("\n");
+				printf("Pós ordem: ");exibirPosOrdem(arvore); printf("\n");
 				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
 			case 4:
-				exibirEmOrdem(arvore); printf("\n");
+				printf("Em ordem: ");exibirEmOrdem(arvore); printf("\n");
 				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
