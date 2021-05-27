@@ -1,30 +1,85 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <locale.h>
+#include <string.h>
 
 struct no{
 	int n;
-	//Necess·rio definir dois nÛs para a estrutura, porque cada elemento tem 2 nÛs
+	//Necess√°rio definir dois n√≥s para a estrutura, porque cada elemento tem 2 n√≥s
 	struct no *esquerda;
 	struct no *direita;
 };
 typedef struct no no;
+//---------------------------------//
+struct noF{
+	int n;
+	struct noF *elo;	 //Aqui √© definido o ponteiro para o pr√≥ximo n√≥     [n/*] -> [n/*]
+};
+
+typedef struct noF nof;
+
+nof* criarNof(){
+	nof *p = malloc(sizeof(struct no)); //Aqui √© onde √© alocado a mem√≥ria
+	return p; 
+}
+
+nof* inserirElementoFim(nof *Lista, int num){ //Aqui recebida a lista e o elemento a ser inserido. 
+	nof *novo = criarNof(); 	 				//Novo do tipo *no recebe a aloca√ß√£o de mem√≥ria
+	novo->n = num;							//Diz que o elemento n do n√≥ novo √© igual a num
+	nof *aux = Lista;						//Cria uma Lista auxiliar aux do tipo no* para conseguir percorrer a Lista at√© o final 
+	if(Lista == NULL){						//Se a lista for vazia
+		Lista = novo;						//Diz que a lista √© igual ao n√≥ novo
+		novo->elo = NULL;					//Diz que o elo do novo n√≥ √© NULL porque ele √© o primeiro elemento.
+	}else{									
+		while(aux->elo !=NULL){				//Se utilizado a vari√°vel *Lista para percorrer, os elementos da lista perder√£o a refer√™ncia do elo.
+			aux = aux ->elo;				//Passando o elemento atual para a pr√≥xima posi√ß√£o. N√≥ atual = N√≥ que est√° endere√ßado no Elo
+		}
+		aux->elo = novo;					//Ap√≥s encontrar o N√≥ que possui como Elo -> NULL, dizer que esse novo Elo √© igual a aux[num/Novo] -> Novo[num/Elo]
+		novo->elo = NULL;					//NOVO[num/NULL]
+	}
+	return Lista;							//Retorna lista
+}
+
+void imprimirLista(nof *Lista){						//Recebe Lista como par√¢metro
+	nof *aux = Lista;								//Declara vari√°vel auxiliar para percorrer a lista
+	printf("Imprimindo elementos da lista\n");		
+	while(aux != NULL){								//Enquanto a lista for diferente de NULL
+		printf("%i ", aux->n);						//Imprime o valor de n de aux 
+		aux= aux->elo;								//Diz que aux √© igual ao n√≥ que est√° endere√ßado no Elo
+	}
+}
+
+nof *apagarInicio(nof *Lista){
+	nof *aux = Lista;
+	nof *atual = NULL;
+	if(Lista == NULL){
+		printf("apagarInicio: Lista j√° est√° vazia\n");
+		return Lista;
+	}else{
+		atual = aux;
+		Lista= Lista->elo;
+		free(atual);		
+	}
+	return Lista;
+}
+
+//----------------------------------//
 
 void inserirNo(no** arvore, int num){
-	//Se a arvore for nula, ent„o insere o elemento na raiz
+	//Se a arvore for nula, ent√£o insere o elemento na raiz
 	if(*arvore==NULL){
-		*arvore= (no *)malloc(sizeof(no)); //Aloca memÛria para o nÛ da estrutura
-		//Define que o nÛ a esquerda e direita s„o NULL e que o elemento È num
+		*arvore= (no *)malloc(sizeof(no)); //Aloca mem√≥ria para o n√≥ da estrutura
+		//Define que o n√≥ a esquerda e direita s√£o NULL e que o elemento √© num
 		(*arvore)->esquerda = NULL; 	   
 		(*arvore)->direita = NULL;
 		(*arvore)->n = num;
-	//Sen„o, verifica se o num È menor, maior ou igual que o elemento atual
+	//Sen√£o, verifica se o num √© menor, maior ou igual que o elemento atual
 	}else{
 		if(num < (*arvore)->n){
-			//Se for menor, chama a funÁ„o recursivamente passando o elemento ‡ esquerda
+			//Se for menor, chama a fun√ß√£o recursivamente passando o elemento √† esquerda
 			inserirNo(&(*arvore)->esquerda, num);
 		}else{
-			//Se for maior, chama a funÁ„o recursivamente passando o elemento ‡ direita
+			//Se for maior, chama a fun√ß√£o recursivamente passando o elemento √† direita
 			inserirNo(&(*arvore)->direita, num);
 		}
 	}
@@ -32,26 +87,27 @@ void inserirNo(no** arvore, int num){
 
 //Minha tentativa
 no* criarNo(){
-	no *p = malloc(sizeof(struct no)); //Aqui È onde È alocado a memÛria
+	no *p = malloc(sizeof(struct no)); //Aqui √© onde √© alocado a mem√≥ria
 	return p; 
 }
 
 no *inserirNoSemPonteiro(no* arvore, int num){
 	no *aux=arvore;
-	//Se a arvore for nula, ent„o insere o elemento na raiz
+	//Se a arvore for nula, ent√£o insere o elemento na raiz
 	if(arvore==NULL){
-		aux= criarNo(); //Aloca memÛria para o nÛ da estrutura
-		//Define que o nÛ a esquerda e direita s„o NULL e que o elemento n È num
+		aux= criarNo(); //Aloca mem√≥ria para o n√≥ da estrutura
+		//Define que o n√≥ a esquerda e direita s√£o NULL e que o elemento n √© num
 		aux->esquerda = NULL; 	   
 		aux->direita = NULL;
 		aux->n = num;
-	//Sen„o, verifica se o num È menor, maior ou igual que o elemento atual
+		
+	//Sen√£o, verifica se o num √© menor, maior ou igual que o elemento atual
 	}else{
 		if(num < arvore->n){
-			//Se for menor, chama a funÁ„o recursivamente passando o elemento ‡ esquerda
+			//Se for menor, chama a fun√ß√£o recursivamente passando o elemento √† esquerda
 			inserirNo(&(arvore->esquerda), num);
 		}else{
-			//Se for maior, chama a funÁ„o recursivamente passando o elemento ‡ direita
+			//Se for maior, chama a fun√ß√£o recursivamente passando o elemento √† direita
 			inserirNo(&(arvore->direita), num);
 		}
 	}
@@ -60,71 +116,140 @@ no *inserirNoSemPonteiro(no* arvore, int num){
 //Minha tentativa
 
 void exibirPreOrdem(no *arvore){
-	//Define vari·vel auxiliar para percorrer a ‡rvore
+	//Define vari√°vel auxiliar para percorrer a √†rvore
 	no *aux= arvore;
-	printf("("); 							//ExibiÁ„o serve para visualizar os nÛs e os filhos durante a recurs„o.
-    if(arvore != NULL){ 					//Se a ·rvore for diferente de NULL, ent„o:
+	printf("("); 							//Exibi√ß√£o serve para visualizar os n√≥s e os filhos durante a recurs√£o.
+    if(arvore != NULL){ 					//Se a √°rvore for diferente de NULL, ent√£o:
     	printf("%i", aux->n);				//Exibe o elemento
-        exibirPreOrdem(aux->esquerda);		//Chama a funÁ„o recursivamente passando o nÛ ‡ esquerda
-        exibirPreOrdem(aux->direita);		//Chama a funÁ„o recursivamente passando o nÛ ‡ direita
+        exibirPreOrdem(aux->esquerda);		//Chama a fun√ß√£o recursivamente passando o n√≥ √† esquerda
+        exibirPreOrdem(aux->direita);		//Chama a fun√ß√£o recursivamente passando o n√≥ √† direita
     }
     printf(")");
 }
 
+void exibirPosOrdem(no *arvore){
+    if(arvore != NULL){ 
+        exibirPosOrdem(arvore->esquerda); //chama a fun√ß√£o recursivamente pela esquerda 
+        exibirPosOrdem(arvore->direita);  //chama a fun√ß√£o recursivamente pela direita
+        printf("%i, ", arvore->n); 		  //exibe o elemento
+    }
+}
+
+void exibirEmOrdem(no *arvore){
+    if(arvore != NULL){
+        exibirEmOrdem(arvore->esquerda); //chama a fun√ß√£o recursivamente pela esquerda 
+        printf("%i ,", arvore->n);		 //exibe o elemento
+        exibirEmOrdem(arvore->direita);  //chama a fun√ß√£o recursivamente pela direita
+    }
+}
+
 int buscarElemento(no *arvore, int num){
 	no *aux= arvore;
-	//Se a ·rvore for nula retorna 0
-	if(arvore==NULL){
+	//Se a √°rvore for nula retorna 0
+	if(aux==NULL){
 		return 0;
 	}else{
-		//Enquanto a arvore auxiliar n„o for nula, ent„o faÁa
 		while(aux!= NULL){
-			//Se o elemento for igual, ent„o retorna 1
-			if(aux->n == num){
+			//printf("--%i, %i\n",aux->n, num);
+			if(num == aux->n){
 				return 1;
-			}
-			//Se o elemento for maior, percorre para o nÛ ‡ direita
-			if(aux->n > num){
-				aux= aux->direita;
-			//Sen„o, percorre para o nÛ ‡ esquerda
-			}else{
-				aux= aux->esquerda;
+			}else if(num< aux->n){
+				aux = aux->esquerda;
+			}else if(num > aux->n){
+				aux = aux->direita;
 			}
 		}
 	}
-	
 	return 0;
 }
+
+void imprimeNo(int num, int b){
+    int i;
+    for (i = 0; i < b; i++){
+		printf("   "); //Mostra os espa√ßos em branco de acordo com o n√≠vel
+	}
+	
+	if(num != -1){
+    	printf("%i<\n", num);
+	}else{
+		printf("NULL\n");
+	}
+	
+}
+
+void exibirNiveis(no* arvore, int b) { //Como a fun√ß√£o √© acionada recursivamente, √© necess√°rio passar o par√¢metro B 
+    //Quando a √°rvore for Nula envia -1 para imprimeNo
+	if (arvore == NULL){ 
+        imprimeNo(-1, b);
+        return;
+    }
+    //Exibe a √°rvore EM ORDEM
+	exibirNiveis(arvore->direita, b+1);  //Chama recursivamente pela direita passando o par√¢metro b +1 para ajustar a dist√¢ncia da esquerda at√© o elemento.
+	imprimeNo(arvore->n, b); 			 //Chama a fun√ß√£o imprime n√≥ que exibe o elemento
+	exibirNiveis(arvore->esquerda, b+1); //Chama recursivamente pela esquerda passando o par√¢metro b +1 para ajustar a dist√¢ncia da esquerda at√© o elemento.
+}
+
+// A fun√ß√£o auxiliar imprimeNo imprime o caracter
+// c precedido de 3b espa√ßos e seguido de uma mudan√ßa
+// de linha.
 
 int main(){
 	setlocale(LC_ALL, "");	
 	no *arvore = NULL;
-	int n;
-	int end= 0, opc=0;
+	int n, result;
+	int end= 0, opc=0, elementos=0;
 	do{
-		printf("Digite o que deseja fazer com a arvore\n1-Inserir elemento\n2-Exibir PrÈ-ordem\n0-SAIR\n");
+		printf("Elementos: %i\n", elementos);
+		printf("Digite o que deseja fazer com a arvore\n1-Inserir elemento\n2-Exibir Pr√©-ordem\n3-Exibir P√≥s-ordem\n4-Exibir Em ordem\n5-Buscar elemento\n6-Imprimir em n√≠veis\n0-SAIR\n");
 		scanf("%i", &opc);
-		printf("opc: %i, end: %i\n", opc, end);
+		//printf("opc: %i, end: %i\n", opc, end);
 		switch(opc){
 			case 1:
-				printf("Digite o n˙mero a ser inserido. (N˙mero>0)\n");
+				printf("Digite o n√∫mero a ser inserido. (N√∫mero>0)\n");
 				do{
 					scanf("%i", &n);	
 				}while(n<1);
 				arvore =inserirNoSemPonteiro(arvore, n);
+				elementos++;
+				exibirNiveis(arvore, 6);
+				getchar();
 				break;
 			case 2:
 				exibirPreOrdem(arvore);
 				getchar();
 				break;
+			case 3:
+				exibirPosOrdem(arvore);
+				getchar();
+				break;
+			case 4:
+				exibirPosOrdem(arvore);
+				getchar();
+				break;
+			case 5:
+				printf("Digite o n√∫mero que deseja buscar. (N√∫mero>0)\n");
+				do{
+					scanf("%i", &n);	
+				}while(n<1);
+				result= buscarElemento(arvore, n);
+				if(result==1){
+					printf("Elemento encontrado\n");
+				}else{
+					printf("Elemento n√£o encontrado");
+				}
+				getchar();
+				break;
+			case 6:
+				exibirNiveis(arvore, 3);
+				getchar();
+				break;
 			case 0:
 				end=1;
 			default:
-				printf("OpÁ„o inv·lida\n");
+				printf("Op√ß√£o inv√°lida\n");
 		}
 		getchar();
 		system("cls");
 	}while(end==0);
 	return 0;
 }
-
