@@ -10,60 +10,6 @@ struct no{
 	struct no *direita;
 };
 typedef struct no no;
-//---------------------------------//
-struct noF{
-	int n;
-	struct noF *elo;	 //Aqui é definido o ponteiro para o próximo nó     [n/*] -> [n/*]
-};
-
-typedef struct noF nof;
-
-nof* criarNof(){
-	nof *p = malloc(sizeof(struct no)); //Aqui é onde é alocado a memória
-	return p; 
-}
-
-nof* inserirElementoFim(nof *Lista, int num){ //Aqui recebida a lista e o elemento a ser inserido. 
-	nof *novo = criarNof(); 	 				//Novo do tipo *no recebe a alocação de memória
-	novo->n = num;							//Diz que o elemento n do nó novo é igual a num
-	nof *aux = Lista;						//Cria uma Lista auxiliar aux do tipo no* para conseguir percorrer a Lista até o final 
-	if(Lista == NULL){						//Se a lista for vazia
-		Lista = novo;						//Diz que a lista é igual ao nó novo
-		novo->elo = NULL;					//Diz que o elo do novo nó é NULL porque ele é o primeiro elemento.
-	}else{									
-		while(aux->elo !=NULL){				//Se utilizado a variável *Lista para percorrer, os elementos da lista perderão a referência do elo.
-			aux = aux ->elo;				//Passando o elemento atual para a próxima posição. Nó atual = Nó que está endereçado no Elo
-		}
-		aux->elo = novo;					//Após encontrar o Nó que possui como Elo -> NULL, dizer que esse novo Elo é igual a aux[num/Novo] -> Novo[num/Elo]
-		novo->elo = NULL;					//NOVO[num/NULL]
-	}
-	return Lista;							//Retorna lista
-}
-
-void imprimirLista(nof *Lista){						//Recebe Lista como parâmetro
-	nof *aux = Lista;								//Declara variável auxiliar para percorrer a lista
-	printf("Imprimindo elementos da lista\n");		
-	while(aux != NULL){								//Enquanto a lista for diferente de NULL
-		printf("%i ", aux->n);						//Imprime o valor de n de aux 
-		aux= aux->elo;								//Diz que aux é igual ao nó que está endereçado no Elo
-	}
-}
-
-nof *apagarInicio(nof *Lista){
-	nof *aux = Lista;
-	nof *atual = NULL;
-	if(Lista == NULL){
-		printf("apagarInicio: Lista já está vazia\n");
-		return Lista;
-	}else{
-		atual = aux;
-		Lista= Lista->elo;
-		free(atual);		
-	}
-	return Lista;
-}
-
-//----------------------------------//
 
 void inserirNo(no** arvore, int num){
 	//Se a arvore for nula, então insere o elemento na raiz
@@ -170,7 +116,7 @@ void imprimeNo(int num, int b){
 	}
 	
 	if(num != -1){
-    	printf("%i<\n", num);
+    	printf("%i<   \n", num);
 	}else{
 		printf("NULL\n");
 	}
@@ -211,19 +157,22 @@ int main(){
 				}while(n<1);
 				arvore =inserirNoSemPonteiro(arvore, n);
 				elementos++;
-				exibirNiveis(arvore, 6);
+				exibirNiveis(arvore, 1);
 				getchar();
 				break;
 			case 2:
-				exibirPreOrdem(arvore);
+				exibirPreOrdem(arvore); printf("\n");
+				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
 			case 3:
-				exibirPosOrdem(arvore);
+				exibirPosOrdem(arvore); printf("\n");
+				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
 			case 4:
-				exibirPosOrdem(arvore);
+				exibirEmOrdem(arvore); printf("\n");
+				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
 			case 5:
@@ -247,6 +196,7 @@ int main(){
 				end=1;
 			default:
 				printf("Opção inválida\n");
+				getchar();
 		}
 		getchar();
 		system("cls");
