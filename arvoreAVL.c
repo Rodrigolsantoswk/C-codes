@@ -1,19 +1,18 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <locale.h>
 
 struct no{
 	int n;
-	//Adicionado altura (nÌvel ao contr·rio)
+	//Adicionado altura (n√≠vel ao contr√°rio)
 	int altura;
-	//Necess·rio definir dois nÛs para a estrutura, porque cada elemento pode ter 2 nÛs filhos
+	//Necess√°rio definir dois n√≥s para a estrutura, porque cada elemento pode ter 2 n√≥s filhos
 	struct no *esquerda;
 	struct no *direita;
 };
 typedef struct no no;
 
-//MÈtodo retorna a altura atual do nÛ
+//M√©todo retorna a altura atual do n√≥
 int altura(no *No){
 	if(No == NULL){
 		return -1;
@@ -22,13 +21,13 @@ int altura(no *No){
 	}
 }
 
-//mÈtodo retorna o fator de balanceamento em absoluto
+//m√©todo retorna o fator de balanceamento em absoluto
 int Fatbal(struct no *No){
-	//returna valor absoluto da subtraÁ„o da altura do nÛ ‡ esquerda e do nÛ ‡ direita
+	//returna valor absoluto da subtra√ß√£o da altura do n√≥ √† esquerda e do n√≥ √† direita
 	return labs(altura(No->esquerda) - altura(No->direita));
 }
 
-//retorna o maior valor entre dois n˙meros
+//retorna o maior valor entre dois n√∫meros
 int maior(int x, int y){
 	if(x>y){
 		return x;
@@ -37,8 +36,7 @@ int maior(int x, int y){
 	}
 }
 
-//Realiza a rotaÁ„o simples ‡ esquerda. Esta rotaÁ„o È realizada quando
-//necess·rio realocar os nÛs na sub-‡rvore ‡ direita. 
+//Realiza a rota√ß√£o simples √† esquerda. Esta rota√ß√£o √© realizada quando h√° um desbalanceamento para a direita
 void rotacaorr(no** No){
 	no* aux = (*No)->direita;
 	(*No)->direita=aux->esquerda;
@@ -48,8 +46,7 @@ void rotacaorr(no** No){
 	(*No)=aux;
 }
 
-//Realiza a rotaÁ„o simples ‡ esquerda. Esta rotaÁ„o È realizada quando
-//necess·rio realocar os nÛs na sub-‡rvore ‡ esquerda.
+//Realiza a rota√ß√£o simples √† direita. Esta rota√ß√£o √© realizada quando h√° um desbalanceamento para a esquerda
 void rotacaoll(no **No){
 	no* aux = (*No)->esquerda;
 	(*No)->esquerda = aux->direita;
@@ -59,18 +56,39 @@ void rotacaoll(no **No){
 	(*No) = aux;
 }
 
+//Rota√ß√£o esquerda-direita. Utilizada quando h√° "joelho" para a esquerda
 void rotacaolr(no** No){
 	rotacaorr(&(*No)->esquerda);
 	rotacaoll(No);
 }
 
+//Rota√ß√£o direita-esquerda. Utilizada quando h√° "joelho" para a direita
 void rotacaorl(no **No){
 	rotacaoll(&(*No)->direita);
 	rotacaorr(No);
 }
 
+int height(no* arvore){
+    if (arvore == NULL)
+        return 0;
+    else{
+        /* compute the height of each subtree */
+        int eheight = height(arvore->esquerda);
+        int dheight = height(arvore->direita);
+ 
+        /* use the larger one */
+        if (eheight > dheight){
+            return(eheight + 1);
+        }
+        else{
+          return(dheight + 1);
+        }
+    }
+}
+
+
 no* criarNo(){
-	no *p = malloc(sizeof(struct no)); //Aqui È onde È alocado a memÛria
+	no *p = malloc(sizeof(struct no)); //Aqui √© onde √© alocado a mem√≥ria
 	return p; 
 }
 
@@ -108,7 +126,7 @@ int inserirNoAvl(no **arvore, int num){
 			}
 		}
 	}else{
-		printf("Este valor j· foi inserido\n");
+		printf("Este valor j√° foi inserido\n");
 		return 0;
 	}
 	atual->altura = maior(altura(atual->esquerda), altura(atual->direita))+1;
@@ -116,36 +134,36 @@ int inserirNoAvl(no **arvore, int num){
 }
 
 void exibirPreOrdem(no *arvore){
-	//Define vari·vel auxiliar para percorrer a ‡rvore
+	//Define vari√°vel auxiliar para percorrer a √†rvore
 	no *aux= arvore;
-	printf("("); 							//ExibiÁ„o serve para visualizar os nÛs e os filhos durante a recurs„o.
-    if(arvore != NULL){ 					//Se a ·rvore for diferente de NULL, ent„o:
+	printf("("); 							//Exibi√ß√£o serve para visualizar os n√≥s e os filhos durante a recurs√£o.
+    if(arvore != NULL){ 					//Se a √°rvore for diferente de NULL, ent√£o:
     	printf("%i", aux->n);				//Exibe o elemento
-        exibirPreOrdem(aux->esquerda);		//Chama a funÁ„o recursivamente passando o nÛ ‡ esquerda
-        exibirPreOrdem(aux->direita);		//Chama a funÁ„o recursivamente passando o nÛ ‡ direita
+        exibirPreOrdem(aux->esquerda);		//Chama a fun√ß√£o recursivamente passando o n√≥ √† esquerda
+        exibirPreOrdem(aux->direita);		//Chama a fun√ß√£o recursivamente passando o n√≥ √† direita
     }
     printf(")");
 }
 
 void exibirPosOrdem(no *arvore){
     if(arvore != NULL){ 
-        exibirPosOrdem(arvore->esquerda); //chama a funÁ„o recursivamente pela esquerda 
-        exibirPosOrdem(arvore->direita);  //chama a funÁ„o recursivamente pela direita
+        exibirPosOrdem(arvore->esquerda); //chama a fun√ß√£o recursivamente pela esquerda 
+        exibirPosOrdem(arvore->direita);  //chama a fun√ß√£o recursivamente pela direita
         printf("%i  ", arvore->n); 		  //exibe o elemento
     }
 }
 
 void exibirEmOrdem(no *arvore){
     if(arvore != NULL){
-        exibirEmOrdem(arvore->esquerda); //chama a funÁ„o recursivamente pela esquerda 
+        exibirEmOrdem(arvore->esquerda); //chama a fun√ß√£o recursivamente pela esquerda 
         printf("%i  ", arvore->n);		 //exibe o elemento
-        exibirEmOrdem(arvore->direita);  //chama a funÁ„o recursivamente pela direita
+        exibirEmOrdem(arvore->direita);  //chama a fun√ß√£o recursivamente pela direita
     }
 }
 
 int buscarElemento(no *arvore, int num){
 	no *aux= arvore;
-	//Se a ·rvore for nula retorna 0
+	//Se a √°rvore for nula retorna 0
 	if(aux==NULL){
 		return 0;
 	}else{
@@ -166,7 +184,7 @@ int buscarElemento(no *arvore, int num){
 void imprimeNo(int num, int b, int altura){
     int i;
     for (i = 0; i < b; i++){
-		printf("   "); //Mostra os espaÁos em branco de acordo com o nÌvel
+		printf("   "); //Mostra os espa√ßos em branco de acordo com o n√≠vel
 	}
 	if(num != -1){
     	printf("%i/%i< \n", num, altura);
@@ -175,51 +193,240 @@ void imprimeNo(int num, int b, int altura){
 	}
 }
 
-void exibirNiveis(no* arvore, int b) { //Como a funÁ„o È acionada recursivamente, È necess·rio passar o par‚metro B 
-    //Quando a ·rvore for Nula envia -1 para imprimeNo
+void exibirNiveis(no* arvore, int b) { //Como a fun√ß√£o √© acionada recursivamente, √© necess√°rio passar o par√¢metro B 
+    //Quando a √°rvore for Nula envia -1 para imprimeNo
 	if (arvore == NULL){ 
         imprimeNo(-1, b, -1);
         return;
     }
-    //Exibe a ·rvore EM ORDEM
-	exibirNiveis(arvore->direita, b+1);  //Chama recursivamente pela direita passando o par‚metro b +1 para ajustar a dist‚ncia da esquerda atÈ o elemento.
-	imprimeNo(arvore->n, b, arvore->altura);  //Chama a funÁ„o imprime nÛ que exibe o elemento
-	exibirNiveis(arvore->esquerda, b+1); //Chama recursivamente pela esquerda passando o par‚metro b +1 para ajustar a dist‚ncia da esquerda atÈ o elemento.
+    //Exibe a √°rvore EM ORDEM
+	exibirNiveis(arvore->direita, b+1);  //Chama recursivamente pela direita passando o par√¢metro b +1 para ajustar a dist√¢ncia da esquerda at√© o elemento.
+	imprimeNo(arvore->n, b, arvore->altura);  //Chama a fun√ß√£o imprime n√≥ que exibe o elemento
+	exibirNiveis(arvore->esquerda, b+1); //Chama recursivamente pela esquerda passando o par√¢metro b +1 para ajustar a dist√¢ncia da esquerda at√© o elemento.
+}
+//-------------------------------------------------------LISTA E BUSCA POR N√çVEL AQUI ---------------------------------------------------------------------------//
+
+struct li{
+	int n;
+	int alt;
+	struct li *elo; //Aqui √© definido o ponteiro para o pr√≥ximo n√≥     [n/*] -> [n/*]
+};
+typedef struct li li;
+
+
+li* criarNoli(){
+	li *p = malloc(sizeof(struct li)); //Aqui √© onde √© alocado a mem√≥ria
+	return p; 
 }
 
+void inserirElementoFim(li **Lista, int num, int alt){ //Aqui recebida a lista e o elemento a ser inserido. 
+	li *novo = criarNoli(); 	 			//Novo do tipo *no recebe a aloca√ß√£o de mem√≥ria
+	novo->n = num;
+	novo->alt= alt;							//Diz que o elemento n do n√≥ novo √© igual a num
+	li *aux = *Lista;						//Cria uma Lista auxiliar aux do tipo no* para conseguir percorrer a Lista at√© o final 
+	if(Lista == NULL){						//Se a lista for vazia
+		*Lista = novo;						//Diz que a lista √© igual ao n√≥ novo
+		novo->elo = NULL;					//Diz que o elo do novo n√≥ √© NULL porque ele √© o primeiro elemento.
+	}else{									
+		while(aux->elo !=NULL){				//Se utilizado a vari√°vel *Lista para percorrer, os elementos da lista perder√£o a refer√™ncia do elo.
+			aux = aux ->elo;				//Passando o elemento atual para a pr√≥xima posi√ß√£o. N√≥ atual = N√≥ que est√° endere√ßado no Elo
+		}
+		aux->elo = novo;					//Ap√≥s encontrar o N√≥ que possui como Elo -> NULL, dizer que esse novo Elo √© igual a aux[num/Novo] -> Novo[num/Elo]
+		novo->elo = NULL;					//NOVO[num/NULL]
+	}										//Retorna lista
+}
+
+li *apagarInicio(li *Lista){
+	li *aux = Lista;
+	li *atual = NULL;
+	if(Lista == NULL){
+		printf("apagarInicio: Lista j√° est√° vazia\n");
+		return Lista;
+	}else{
+		atual = aux;
+		Lista= Lista->elo;
+		free(atual);		
+	}
+	return Lista;
+}
+
+void imprimirLista(li *Lista){						//Recebe Lista como par√¢metro
+	li *aux = Lista;								//Declara vari√°vel auxiliar para percorrer a lista
+	printf("\nImprimindo elementos da lista\n");
+	if(aux!=NULL){
+		while(aux != NULL){								//Enquanto a lista for diferente de NULL
+			printf("%i/%i\n", aux->n, aux->alt); 		//Imprime o valor de n de aux 
+			aux= aux->elo;								//Diz que aux √© igual ao n√≥ que est√° endere√ßado no Elo
+		}
+	}else{
+		printf("Lista vazia\n");
+	}
+	
+}
+
+
+li* SelectionSort(li *Lista){
+	li *aux = Lista;
+	li *aux2= Lista;
+	li *menor;							//Vari√°vel para armazenar n√≥ com o menor valor durante a execu√ß√£o da repeti√ß√£o
+	int a;								//Vari√°vel para armazenar o menor valor
+	if (Lista != NULL){					
+		while(aux != NULL){				
+			menor = aux;				//Define que menor = elemento atual
+			while(aux2 !=NULL){			//Percorre o vetor auxiliar do in√≠cio ao fim
+				if(aux2->n > aux->n){	//Verifica se o elemento atual de aux2 √© menor que o elemento atual de aux
+					menor = aux2;		//Se o elemento de aux2 for menor que o elemento atual de aux, ent√£o menor = aux2
+					//Troca de elementos na lista
+					a= aux->n;			
+					aux->n = menor->n;
+					menor->n = a;
+				
+				}
+				aux2= aux2->elo;		
+			}
+			aux2= Lista;
+			aux= aux->elo;
+		}
+	}
+	return Lista;
+}
+
+//busca sequencial
+int buscaSequencial(li *Lista, int num){
+	li *aux = Lista;
+	int cont=0, verifExist =0, pos =0;
+	if(Lista != NULL){
+		while(aux != NULL){
+			if(aux->n == num){		//Verifica se o elemento atual √© igual ao n√∫mero buscado
+				pos = cont;			//Se for igual, armazena a posi√ß√£o
+				verifExist=1;		//Coloca o valor 1 na vari√°vel de verifica√ß√£o
+				break;				//para a repeti√ß√£o
+			}
+			cont++;					//Sen√£o, cont++
+			aux= aux->elo;			//Vai para o pr√≥ximo Elo.
+		}
+	}
+	if(verifExist==1){				//Se verifExist ==1 retorna pos, sen√£o, retorna -1
+		return 1;
+	}else{
+		return -1;
+	}
+}
+
+
+
+
+//-------------------------------------------------------LISTA E BUSCA POR N√çVEL AQUI ---------------------------------------------------------------------------//
+
+
+//-------------------------------Exibi√ß√£o
+#define espaco 2
+//secondary function
+void desenha_arvore_horiz(no *arvore, int depth, char *path, int direita){
+    // stopping condition
+    if (arvore== NULL){
+    	return;
+	}
+    // increase spacing
+    depth++;
+    // start with direita no
+    desenha_arvore_horiz(arvore->direita, depth, path, 1);
+    // set | draw map
+    path[depth-2] = 0;
+    if(direita)
+        path[depth-2] = 1;
+    if(arvore->esquerda)
+        path[depth-1] = 1;
+    // print root after spacing
+    printf("\n");
+    int i;
+    for(i=0; i<depth-1; i++)
+    {
+      if(i == depth-2)
+          printf("+");
+      else if(path[i])
+          printf("|");
+      else
+          printf(" ");
+	  int j;
+      for(j=1; j<espaco; j++)
+      if(i < depth-2)
+          printf(" ");
+      else
+          printf("-");
+    }
+
+    printf("%d\n", arvore->n);
+
+    // vertical espacors below
+    for(i=0; i<depth; i++)
+    {
+		if(path[i])
+		  printf("|");
+		else
+		  printf(" ");
+		int j;
+		for(j=1; j<espaco; j++)
+		  printf(" ");
+    }
+
+    // go to esquerda no
+    desenha_arvore_horiz(arvore->esquerda, depth, path, 0);
+}
+
+//primary fuction
+void draw_arvore_hor(no *arvore)
+{
+    // should check if we don't exceed this somehow..
+    char path[255] = {};
+
+    //initial depth is 0
+    desenha_arvore_horiz(arvore, 0, path, 0);
+}
+
+#define elem 7
+void inserir1000(no **arvore){
+	int i;
+	for(i=0; i<elem; i++){
+		inserirNoAvl(&(*arvore), i);
+	}
+	draw_arvore_hor(*arvore);
+}
 
 
 int main(){
 	setlocale(LC_ALL,"");
 	no *arvore= NULL;
+	li *lista= NULL;
 	int resinsert=0;
 	int n, result;
 	int end= 0, opc=0, elementos=0;
 	do{
 		printf("Elementos: %i\n", elementos);
-		printf("Digite o que deseja fazer com a arvore\n1-Inserir elemento\n2-Exibir PrÈ-ordem\n3-Exibir PÛs-ordem\n4-Exibir Em ordem\n5-Buscar elemento\n6-Imprimir em nÌveis\n0-SAIR\n");
+		printf("Digite o que deseja fazer com a arvore\n1-Inserir elemento\n2-Exibir Pr√©-ordem\n3-Exibir P√≥s-ordem\n4-Exibir Em ordem\n5-Buscar elemento\n6-Imprimir em n√≠veis\n7-Inserir %i elementos\n0-SAIR\n", elem);
 		scanf("%i", &opc);
 		//printf("opc: %i, end: %i\n", opc, end);
 		switch(opc){
 			case 1:
 				do{
-					printf("Digite o n˙mero a ser inserido. (N˙mero>0)\n");
+					printf("Digite o n√∫mero a ser inserido. (N√∫mero>0)\n");
 					do{
 						scanf("%i", &n);	
 					}while(n<1);
 					resinsert=inserirNoAvl(&(arvore), n);
 				}while(resinsert!=1);
 				elementos++; 
-				exibirNiveis(arvore, 1);
+				//exibirNiveis(arvore, 1);
+				draw_arvore_hor(arvore);
 				getchar();
 				break;
 			case 2:
-				printf("PrÈ ordem: ");exibirPreOrdem(arvore); printf("\n");
+				printf("Pr√© ordem: ");exibirPreOrdem(arvore); printf("\n");
 				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
 			case 3:
-				printf("PÛs ordem: ");exibirPosOrdem(arvore); printf("\n");
+				printf("P√≥s ordem: ");exibirPosOrdem(arvore); printf("\n");
 				exibirNiveis(arvore, 1); 
 				getchar();
 				break;
@@ -229,7 +436,7 @@ int main(){
 				getchar();
 				break;
 			case 5:
-				printf("Digite o n˙mero que deseja buscar. (N˙mero>0)\n");
+				printf("Digite o n√∫mero que deseja buscar. (N√∫mero>0)\n");
 				do{
 					scanf("%i", &n);	
 				}while(n<1);
@@ -237,18 +444,24 @@ int main(){
 				if(result==1){
 					printf("Elemento encontrado\n");
 				}else{
-					printf("Elemento n„o encontrado");
+					printf("Elemento n√£o encontrado");
 				}
 				getchar();
 				break;
 			case 6:
-				exibirNiveis(arvore, 3);
+				draw_arvore_hor(arvore);
+				//lista=LevelOrderedTree(arvore, lista);
+				//imprimirLista(lista);
+				getchar();
+				break;
+			case 7:
+				inserir1000(&arvore);
 				getchar();
 				break;
 			case 0:
 				end=1;
 			default:
-				printf("OpÁ„o inv·lida\n");
+				printf("Op√ß√£o inv√°lida\n");
 				getchar();
 		}
 		getchar();
@@ -257,4 +470,3 @@ int main(){
 	}while(end==0);
 	return 0;
 }
-
